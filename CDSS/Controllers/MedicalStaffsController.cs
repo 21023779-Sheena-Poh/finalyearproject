@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalStaff.Controllers;
 
@@ -78,3 +78,4 @@ public class MedicalStaffController : Controller
     }
 
 }
+*/
