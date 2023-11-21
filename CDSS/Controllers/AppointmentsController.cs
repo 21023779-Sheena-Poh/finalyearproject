@@ -51,7 +51,7 @@ namespace CDSS.Controllers
         // GET: Appointments/Create
         public IActionResult Create()
         {
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName");
+            ViewData["FullName"] = new SelectList(_context.Patients, "PatientId", "FullName");
             return View();
         }
 
