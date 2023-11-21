@@ -17,6 +17,8 @@ public partial class Appointments
 
     public virtual Patients Patient { get; set; } = null!;
 
+    public string FullName => Patient.FullName;
+
     public virtual ICollection<Review> Review { get; set; } = new List<Review>();
 
     public virtual ICollection<MedicalStaff> MedicalStaff { get; set; } = new List<MedicalStaff>();
