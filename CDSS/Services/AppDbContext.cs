@@ -96,7 +96,8 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PatientMedication>(entity =>
         {
-            entity.HasNoKey();
+            // Specify the primary key
+            entity.HasKey(e => e.PatientMedicationID);
 
             entity.Property(e => e.Dosage)
                 .HasMaxLength(50)
@@ -112,16 +113,20 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PatientId).HasColumnName("PatientID");
             entity.Property(e => e.StartMedication).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Medication).WithMany()
+            // Configure the relationships
+            entity.HasOne(d => d.Medication)
+                .WithMany()
                 .HasForeignKey(d => d.MedicationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__PatientMe__Medic__300424B4");
 
-            entity.HasOne(d => d.Patient).WithMany()
+            entity.HasOne(d => d.Patient)
+                .WithMany()
                 .HasForeignKey(d => d.PatientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__PatientMe__Patie__2F10007B");
         });
+
 
         modelBuilder.Entity<Patients>(entity =>
         {
