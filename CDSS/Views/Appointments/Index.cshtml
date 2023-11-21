@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PatientId)
+                @Html.DisplayNameFor(model => model.Patient.FullName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentDate)
@@ -29,26 +29,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.PatientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AppointmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurposeOfVisit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdditionalNotes)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AppointmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AppointmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AppointmentId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AppointmentDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PurposeOfVisit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdditionalNotes)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AppointmentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.AppointmentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.AppointmentId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

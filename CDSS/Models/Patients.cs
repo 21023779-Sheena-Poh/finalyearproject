@@ -13,6 +13,8 @@ public partial class Patients
 
     public DateTime? Birthdate { get; set; }
 
+    public string FullName => $"{FirstName} {LastName}";
+
     public Patients()
     {
         Birthdate = DateTime.MinValue.Date;

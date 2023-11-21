@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using CDSS.Models;
 using CDSS.Services;
 
-
-
 namespace CDSS.Controllers
 {
     public class AppointmentsController : Controller
@@ -25,13 +23,11 @@ namespace CDSS.Controllers
         public async Task<IActionResult> Index()
         {
             var appointments = await _context.Appointments
-            .Include(a => a.Patient) // Ensure patient information is included
-            .ToListAsync();
+                .Include(a => a.Patient) // Ensure patient information is included
+                .ToListAsync();
 
             return View(appointments);
-
         }
-
 
         // GET: Appointments/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -55,14 +51,11 @@ namespace CDSS.Controllers
         // GET: Appointments/Create
         public IActionResult Create()
         {
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FirstName");
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName");
             return View();
-
         }
 
         // POST: Appointments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AppointmentId,PatientId,AppointmentDate,PurposeOfVisit,AdditionalNotes")] Appointments appointments)
@@ -73,7 +66,7 @@ namespace CDSS.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", appointments.PatientId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", appointments.PatientId);
             return View(appointments);
         }
 
@@ -90,13 +83,11 @@ namespace CDSS.Controllers
             {
                 return NotFound();
             }
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", appointments.PatientId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", appointments.PatientId);
             return View(appointments);
         }
 
         // POST: Appointments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AppointmentId,PatientId,AppointmentDate,PurposeOfVisit,AdditionalNotes")] Appointments appointments)
@@ -126,7 +117,7 @@ namespace CDSS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", appointments.PatientId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", appointments.PatientId);
             return View(appointments);
         }
 
@@ -156,21 +147,21 @@ namespace CDSS.Controllers
         {
             if (_context.Appointments == null)
             {
-                return Problem("Entity set 'AppDbContext.Appointments'  is null.");
+                return Problem("Entity set 'AppDbContext.Appointments' is null.");
             }
             var appointments = await _context.Appointments.FindAsync(id);
             if (appointments != null)
             {
                 _context.Appointments.Remove(appointments);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AppointmentsExists(int id)
         {
-          return (_context.Appointments?.Any(e => e.AppointmentId == id)).GetValueOrDefault();
+            return (_context.Appointments?.Any(e => e.AppointmentId == id)).GetValueOrDefault();
         }
     }
 }
