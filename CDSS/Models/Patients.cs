@@ -13,11 +13,6 @@ public partial class Patients
 
     public DateTime? Birthdate { get; set; }
 
-    public Patients()
-    {
-        Birthdate = DateTime.MinValue.Date;
-    }
-
     public string? Ward { get; set; }
 
     public string? Bed { get; set; }
@@ -29,9 +24,4 @@ public partial class Patients
     public string? MedicalCondition { get; set; }
 
     public virtual ICollection<Appointments> Appointments { get; set; } = new List<Appointments>();
-
-    public string? GetFormattedBirthdate()
-    {
-        return Birthdate?.ToString("yyyy-MM-dd"); // Change the format as needed
-    }
 }

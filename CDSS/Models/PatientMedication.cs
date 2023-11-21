@@ -4,7 +4,10 @@ using System.Collections.Generic;
 namespace CDSS.Models;
 
 public partial class PatientMedication
+
 {
+    public int PatientMedicationID { get; set; }
+
     public int PatientId { get; set; }
 
     public int MedicationId { get; set; }

@@ -4,11 +4,14 @@ namespace CDSS.Models;
 
 public class LoginUser
 {
-    [Required(ErrorMessage = "Please enter Username")]
-    public string Username { get; set; } = null!;
+    [Required(ErrorMessage = "User ID cannot be empty!")]
+    public string MedicalStaffId { get; set; } = null!;
 
-    [Required(ErrorMessage = "Please enter Password")]
+    [Required(ErrorMessage = "Empty password not allowed!")]
     [DataType(DataType.Password)]
     public string Password { get; set; } = null!;
+
+    public int Id { get; set; }
+    public string UserName { get; set; } = null!;
 }
 

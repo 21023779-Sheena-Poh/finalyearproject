@@ -14,12 +14,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/MedicalStaffs/Login/";
-                    options.AccessDeniedPath = "/MedicalStaffs/Forbidden/";
+                    options.LoginPath = "/Account/Login/";
+                    options.AccessDeniedPath = "/Account/Forbidden/";
                 });
-builder.Services.AddScoped<IDbService, DbService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddDbContext<CDSS.Services.AppDbContext>(
+//builder.Services.AddScoped<IDbService, DbService>();
+builder.Services.AddDbContext<AppDbContext>(
    options => options.UseSqlServer(
        builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -37,6 +36,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=MedicalStaffs}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
