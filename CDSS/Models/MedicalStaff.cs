@@ -5,6 +5,7 @@ namespace CDSS.Models;
 
 public partial class MedicalStaff
 {
+
     public int MedicalStaffId { get; set; }
 
     public string Username { get; set; } = null!;

@@ -24,9 +24,14 @@ namespace CDSS.Controllers
         // GET: Appointments
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Appointments.Include(a => a.Patient);
-            return View(await appDbContext.ToListAsync());
+            var appointments = await _context.Appointments
+            .Include(a => a.Patient) // Ensure patient information is included
+            .ToListAsync();
+
+            return View(appointments);
+
         }
+
 
         // GET: Appointments/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -52,6 +57,7 @@ namespace CDSS.Controllers
         {
             ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId");
             return View();
+
         }
 
         // POST: Appointments/Create
