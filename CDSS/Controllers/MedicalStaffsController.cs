@@ -1,17 +1,21 @@
-﻿/*using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using CDSS.Services;
 
-namespace MedicalStaff.Controllers;
+namespace CDSS.Controllers;
 
-public class MedicalStaffController : Controller
+public class MedicalStaffsController : Controller
 {
     private const string REDIRECT_CNTR = "Home";
-    private const string REDIRECT_ACTN = "CDSS";
+    private const string REDIRECT_ACTN = "Index";
     private const string LOGIN_VIEW = "Login";
 
     private readonly IDbService _dbSvc;
     private readonly IAuthService _authSvc;
 
-    public MedicalStaffController(IDbService dbSvc, IAuthService authSvc)
+    public MedicalStaffsController(IDbService dbSvc, IAuthService authSvc)
     {
         _dbSvc = dbSvc;
         _authSvc = authSvc;
@@ -29,15 +33,14 @@ public class MedicalStaffController : Controller
     public IActionResult Login(LoginUser user)
     {
         const string sqlLogin =
-            @"SELECT Id, Username, UserRole FROM AppUser 
-               WHERE Id = '{0}' 
-                 AND UserPass = HASHBYTES('SHA1', '{1}')";
+            @"SELECT MedicalStaffId, Username, Password, Role FROM MedicalStaff 
+               WHERE Username = '{0}'";
+                 
 
 
-        if (!_authSvc.Authenticate(sqlLogin, user.UserId, user.Password,
-                                   out ClaimsPrincipal? principal))
+        if (!_authSvc.Authenticate(sqlLogin, user.Username, user.Password, out ClaimsPrincipal? principal))
         {
-            ViewData["Message"] = "Incorrect Email or Password";
+            ViewData["Message"] = "Incorrect Username or Password";
             ViewData["MsgType"] = "warning";
             return View(LOGIN_VIEW);
         }
@@ -65,10 +68,19 @@ public class MedicalStaffController : Controller
     [Authorize]
     public IActionResult Logoff(string returnUrl = null!)
     {
+        // Sign out the current user
         HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        if (Url.IsLocalUrl(returnUrl))
+
+        // Redirect to the specified URL after logoff or to a default action
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        {
             return Redirect(returnUrl);
-        return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+        }
+        else
+        {
+            // Redirect to a default action after logoff
+            return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+        }
     }
 
     [AllowAnonymous]
@@ -78,4 +90,3 @@ public class MedicalStaffController : Controller
     }
 
 }
-*/

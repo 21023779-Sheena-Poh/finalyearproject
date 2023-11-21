@@ -1,10 +1,10 @@
 ﻿@model CDSS.Models.Patients
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Patient";
 }
 
-<h1>Edit</h1>
+<h1>Edit Patient</h1>
 
 <h4>Patients</h4>
 <hr />
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="MedicalCondition" class="control-label"></label>
-                <input asp-for="MedicalCondition" class="form-control" />
+                <textarea asp-for="MedicalCondition" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="MedicalCondition" class="text-danger"></span>
             </div>
             <div class="form-group">
