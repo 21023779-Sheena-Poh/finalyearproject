@@ -43,6 +43,9 @@
                 @Html.DisplayNameFor(model => model.Patient.MedicalCondition)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Medication.MedicationName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Dosage)
             </th>
             <th>
@@ -87,6 +90,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Patient.MedicalCondition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medication.MedicationName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Dosage)
