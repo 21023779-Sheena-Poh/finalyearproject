@@ -18,13 +18,13 @@ namespace CDSS.Controllers
         {
             _context = context;
         }
-        
+
         // GET: Patients
         public async Task<IActionResult> Index()
         {
-              return _context.Patients != null ? 
-                          View(await _context.Patients.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Patients'  is null.");
+            return _context.Patients != null ?
+                        View(await _context.Patients.ToListAsync()) :
+                        Problem("Entity set 'AppDbContext.Patients'  is null.");
         }
 
         // GET: Patients/Details/5
@@ -150,14 +150,14 @@ namespace CDSS.Controllers
             {
                 _context.Patients.Remove(patients);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PatientsExists(int id)
         {
-          return (_context.Patients?.Any(e => e.PatientId == id)).GetValueOrDefault();
+            return (_context.Patients?.Any(e => e.PatientId == id)).GetValueOrDefault();
         }
     }
 }

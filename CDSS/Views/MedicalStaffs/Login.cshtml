@@ -5,7 +5,13 @@
         background-color: lightblue;
     }
 
+    .form-control {
+        width: 400px; /* Set the desired width for the textboxes */
+        height: 50px; /* Set the desired height for the textboxes */
+        font-size: 18px; /* Set the desired font size for the textboxes */
+    }
 </style>
+
 <h4>CDSS Sign In</h4>
 
 <div class="col-sm-5">
@@ -21,13 +27,13 @@
     <form asp-controller="MedicalStaffs" asp-action="Login" method="post">
         <div class="mb-3">
             <label asp-for="Username" class="form-label fw-bold">Username :</label>
-            <input asp-for="Username" class="form-control form-control-sm" placeholder="Enter Username" />
+            <input asp-for="Username" class="form-control" placeholder="Enter Username" />
             <span asp-validation-for="Username" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="Password" class="form-label fw-bold">Password :</label>
-            <input asp-for="Password" class="form-control form-control-sm" placeholder="Password" />
+            <input asp-for="Password" class="form-control" placeholder="Password" />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
@@ -35,5 +41,4 @@
             <input type="submit" class="btn btn-sm btn-primary" value="Sign In" />
         </div>
     </form>
-
 </div>
