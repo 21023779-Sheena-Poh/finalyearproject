@@ -13,13 +13,15 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PatientMedicationID" />
-           @*  <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="FullName" class="control-label"></label>
                 <select asp-for="FullName" class="form-control" asp-items="ViewBag.FullName"></select>
-            </div> *@
-            @* <div class="form-group">
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="MedicationName" class="control-label"></label>
                 <select asp-for="MedicationName" class="form-control" asp-items="ViewBag.MedicationName"></select>
+                <span asp-validation-for="MedicationName" class="text-danger"></span>
             </div> *@
             <div class="form-group">
                 <label asp-for="Dosage" class="control-label"></label>
