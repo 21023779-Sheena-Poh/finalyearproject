@@ -36,7 +36,16 @@ namespace CDSS.Controllers
             }
 
             var patients = await _context.Patients
+
                 .FirstOrDefaultAsync(m => m.PatientId == id);
+
+            var patientMedications = await _context.PatientMedication
+                .Where(pm => pm.PatientId == id)
+                .Include(pm => pm.Patient)       // Include Patient navigation property
+                .Include(pm => pm.Medication)    // Include Medication navigation property
+                .ToListAsync();
+            ViewData["prescriptions"] = patientMedications;
+
             if (patients == null)
             {
                 return NotFound();

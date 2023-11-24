@@ -13,16 +13,14 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PatientMedicationID" />
-            <div class="form-group">
-                <label asp-for="PatientId" class="control-label"></label>
-                <select asp-for="PatientId" class="form-control" asp-items="ViewBag.PatientId"></select>
-                <span asp-validation-for="PatientId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MedicationId" class="control-label"></label>
-                <select asp-for="MedicationId" class="form-control" asp-items="ViewBag.MedicationId"></select>
-                <span asp-validation-for="MedicationId" class="text-danger"></span>
-            </div>
+           @*  <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <select asp-for="FullName" class="form-control" asp-items="ViewBag.FullName"></select>
+            </div> *@
+            @* <div class="form-group">
+                <label asp-for="MedicationName" class="control-label"></label>
+                <select asp-for="MedicationName" class="form-control" asp-items="ViewBag.MedicationName"></select>
+            </div> *@
             <div class="form-group">
                 <label asp-for="Dosage" class="control-label"></label>
                 <input asp-for="Dosage" class="form-control" />
@@ -38,7 +36,7 @@
                 <input asp-for="Duration" class="form-control" />
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="StartMedication" class="control-label"></label>
                 <input asp-for="StartMedication" class="form-control" />
                 <span asp-validation-for="StartMedication" class="text-danger"></span>
@@ -47,7 +45,8 @@
                 <label asp-for="EndMedication" class="control-label"></label>
                 <input asp-for="EndMedication" class="form-control" />
                 <span asp-validation-for="EndMedication" class="text-danger"></span>
-            </div>
+            </div> *@
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

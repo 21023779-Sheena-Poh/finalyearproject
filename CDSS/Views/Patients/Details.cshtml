@@ -28,7 +28,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Birthdate)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Ward)
         </dt>
         <dd class="col-sm-10">
@@ -40,7 +40,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bed)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Weight)
         </dt>
         <dd class="col-sm-10">
@@ -52,15 +52,127 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BloodType)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MedicalCondition)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.MedicalCondition)
-        </dd>
+        </dd> *@
     </dl>
 </div>
+
+@{
+    var history = (List<PatientMedication>)ViewData["prescriptions"]!;
+}
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.PatientId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    Birth date
+                </th> *@
+                <th>
+                     Ward
+                </th>
+                <th>
+                    Bed
+                </th>
+                @* <th>
+                    Weight
+                </th>
+                <th>
+                    BloodType
+                </th> *@
+                <th>
+                    Medical Condition
+                </th>
+                <th>
+                    Medication Name
+                </th>
+                <th>
+                    Dosage
+                </th>
+                <th>
+                    Frequency
+                </th>
+                <th>
+                    Duration
+                </th>
+                <th>
+                    StartMedication
+                </th>
+                <th>
+                    EndMedication
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in history)
+            {
+                <tr>
+                    @* <td>
+                        @Html.DisplayFor(modelItem => item.Patient.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient.Birthdate)
+                    </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient.Ward)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient.Bed)
+                    </td>
+                    @* <td>
+                        @Html.DisplayFor(modelItem => item.Patient.Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient.BloodType)
+                    </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient.MedicalCondition)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Medication.MedicationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dosage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Frequency)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartMedication)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndMedication)
+                    </td>
+                    <td style="white-space: nowrap;">
+                        <span style="display: inline-block;">
+                            <a asp-controller="PatientMedications" asp-action="Create" asp-route-id="@item.PatientMedicationID">Create</a> |
+                            <a asp-controller="PatientMedications" asp-action="Edit" asp-route-id="@item.PatientMedicationID">Edit</a> | 
+                            <a asp-controller="PatientMedications" asp-action="Delete" asp-route-id="@item.PatientMedicationID">Delete</a>
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    @* <a asp-action="Edit" asp-route-id="@Model?.PatientId">Edit</a> | *@
+    <a asp-controller="Patients" asp-action="Index">Back to List</a>
 </div>

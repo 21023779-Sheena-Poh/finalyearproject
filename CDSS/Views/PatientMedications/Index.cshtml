@@ -44,7 +44,7 @@
                 @Html.DisplayNameFor(model => model.Patient.MedicalCondition)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Medication.MedicationName)
+                @Html.DisplayNameFor(model => model.Dosage)
             </th>
             
             <th></th>
@@ -79,7 +79,19 @@
                     @Html.DisplayFor(modelItem => item.Patient.MedicalCondition)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Medication.MedicationName)
+                    @Html.DisplayFor(modelItem => item.Dosage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Frequency)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartMedication)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndMedication)
                 </td>
                 
                 <td style="white-space: nowrap;">

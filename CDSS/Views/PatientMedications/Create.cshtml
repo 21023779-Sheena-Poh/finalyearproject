@@ -1,7 +1,7 @@
 ﻿@model CDSS.Models.PatientMedication
 
 @{
-    ViewData["Title"] = "Create";
+  ViewData["Title"] = "Create";
 }
 
 <h1>Create</h1>
@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="PatientId" class="control-label"></label>
-                <select asp-for="PatientId" class ="form-control" asp-items="ViewBag.PatientId"></select>
+                <label asp-for="FullName" class="control-label"></label>
+                <select asp-for="FullName" class="form-control" asp-items="ViewBag.FullName"></select>
             </div>
             <div class="form-group">
-                <label asp-for="MedicationId" class="control-label"></label>
-                <select asp-for="MedicationId" class ="form-control" asp-items="ViewBag.MedicationId"></select>
+                <label asp-for="MedicationName" class="control-label">Medication Name</label>
+                <select asp-for="MedicationName" class="form-control" asp-items="ViewBag.MedicationName"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Dosage" class="control-label"></label>

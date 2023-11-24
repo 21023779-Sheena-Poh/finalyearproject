@@ -19,6 +19,28 @@ namespace CDSS.Controllers
             _context = context;
         }
 
+        // GET: PatientMedications/PrescriptionHistory/5
+        public async Task<IActionResult> PrescriptionHistory(int? id)
+        {
+            if (id == null || _context.Patients == null)
+            {
+                return NotFound();
+            }
+
+            var patientMedications = await _context.PatientMedication
+                .Include(pm => pm.Medication) // Include Medication information
+                .Where(pm => pm.PatientId == id)
+                .ToListAsync();
+
+            if (patientMedications == null)
+            {
+                return NotFound();
+            }
+
+            // Display the Prescription History view with the patient's medications
+            return View("PrescriptionHistory", patientMedications);
+        }
+
         // GET: PatientMedications
         public async Task<IActionResult> Index()
         {
@@ -53,8 +75,17 @@ namespace CDSS.Controllers
         // GET: PatientMedications/Create
         public IActionResult Create()
         {
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId");
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId");
+            /*var medications = _context.Medication.ToList(); // Retrieve the medications asynchronously
+
+            var medicationSelectList = medications
+                .Select(m => new SelectListItem
+                {
+                    *//*Value = m.MedicationId.ToString(), // Assuming MedicationId is an integer*//*
+                    Text = m.MedicationName
+                }).ToList();*/
+
+            ViewData["MedicationName"] = new SelectList(_context.Medication.ToList(), "MedicationId", "MedicationName");
+            ViewData["FullName"] = new SelectList(_context.Patients.ToList(), "PatientId", "FullName");
             return View();
         }
 
@@ -71,8 +102,8 @@ namespace CDSS.Controllers
             }
 
             // Only include properties from PatientMedication in ViewData
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", patientMedication.PatientId);
+            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationName", patientMedication.MedicationId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
             return View(patientMedication);
         }
 
@@ -85,13 +116,13 @@ namespace CDSS.Controllers
                 return NotFound();
             }
 
-            var patientMedication = await _context.PatientMedication.FindAsync(id);
+            var patientMedication = await _context.PatientMedication.Where(pm => pm.PatientMedicationID == id).Include(pm=>pm.Patient).Include(pm => pm.Medication).FirstOrDefaultAsync();
             if (patientMedication == null)
             {
                 return NotFound();
             }
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", patientMedication.PatientId);
+            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationName", patientMedication.MedicationId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
             return View(patientMedication);
         }
 
@@ -125,8 +156,8 @@ namespace CDSS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", patientMedication.PatientId);
+            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "Text", patientMedication.MedicationId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
             return View(patientMedication);
         }
 
