@@ -24,7 +24,17 @@ public partial class PatientMedication
 
     public virtual Medication Medication { get; set; } = null!;
 
-    public string MedicationName => $"{MedicationName}";
+    public string MedicationName
+    {
+        get
+        {
+            if (Medication != null && Medication.MedicationName != null)
+            {
+                return Medication.MedicationName;
+            }
+            return "DefaultMedicationName"; // Or any default value you prefer
+        }
+    }
 
     public virtual Patients Patient { get; set; } = null!;
 

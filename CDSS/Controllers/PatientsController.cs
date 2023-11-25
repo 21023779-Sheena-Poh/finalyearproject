@@ -35,23 +35,26 @@ namespace CDSS.Controllers
                 return NotFound();
             }
 
-            var patients = await _context.Patients
+            var patient = await _context.Patients.FirstOrDefaultAsync(m => m.PatientId == id);
 
-                .FirstOrDefaultAsync(m => m.PatientId == id);
-
-            var patientMedications = await _context.PatientMedication
-                .Where(pm => pm.PatientId == id)
-                .Include(pm => pm.Patient)       // Include Patient navigation property
-                .Include(pm => pm.Medication)    // Include Medication navigation property
-                .ToListAsync();
-            ViewData["prescriptions"] = patientMedications;
-
-            if (patients == null)
+            if (patient == null)
             {
                 return NotFound();
             }
 
-            return View(patients);
+            var prescriptions = await _context.PatientMedication
+                .Where(pm => pm.PatientId == id)
+                .Include(pm => pm.Medication)
+                .ToListAsync();
+
+            ViewData["prescriptions"] = prescriptions;
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            return View(patient);
         }
 
         // GET: Patients/Create
@@ -65,7 +68,7 @@ namespace CDSS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PatientId,FirstName,LastName,Birthdate,Ward,Bed,Weight,BloodType,MedicalCondition")] Patients patients)
+        public async Task<IActionResult> Create([Bind("PatientId, FirstName, LastName, Birthdate, Ward, Bed, Weight, BloodType, MedicalCondition")] Patients patients)
         {
             if (ModelState.IsValid)
             {
