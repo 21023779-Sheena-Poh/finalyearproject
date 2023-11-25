@@ -18,15 +18,15 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.PatientId)
-            </th>
+            </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.LastName)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Birthdate)
             </th>
@@ -51,15 +51,15 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.PatientId)
-            </td>
+            </td> *@
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.FullName)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.LastName)
-            </td>
+            </td> *@
             <td>
                 @item.GetFormattedBirthdate()
             </td>

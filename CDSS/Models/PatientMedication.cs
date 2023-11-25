@@ -24,9 +24,8 @@ public partial class PatientMedication
 
     public virtual Medication Medication { get; set; } = null!;
 
-    //public string MedicationName => Medication.MedicationName;
+    public string MedicationName => $"{MedicationName}";
 
     public virtual Patients Patient { get; set; } = null!;
 
-    //public string FullName => Patient.FullName;
 }

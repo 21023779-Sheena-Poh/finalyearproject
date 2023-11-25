@@ -63,8 +63,7 @@ namespace CDSS.Controllers
             var patientMedication = await _context.PatientMedication
                 .Include(pm => pm.Patient)       // Include Patient navigation property
                 .Include(pm => pm.Medication)    // Include Medication navigation property
-                //.FirstOrDefaultAsync(m => m.PatientMedicationID == id)
-                .ToListAsync();
+                .FirstOrDefaultAsync(m => m.PatientMedicationID == id);
                 
             if (patientMedication == null)
             {
@@ -77,17 +76,7 @@ namespace CDSS.Controllers
         // GET: PatientMedications/Create
         public IActionResult Create()
         {
-            /*var medications = _context.Medication.ToList(); // Retrieve the medications asynchronously
-
-            var medicationSelectList = medications
-                .Select(m => new SelectListItem
-                {
-                    *//*Value = m.MedicationId.ToString(), // Assuming MedicationId is an integer*//*
-                    Text = m.MedicationName
-                }).ToList();*/
-
-            /*ViewData["MedicationName"] = new SelectList(_context.Medication.ToList(), "MedicationId", "MedicationName");
-            ViewData["FullName"] = new SelectList(_context.Patients.ToList(), "PatientId", "FullName");*/
+            ViewData["MedicationName"] = new SelectList(_context.Medication.ToList(), "MedicationId", "MedicationName");
             return View();
         }
 
@@ -104,8 +93,7 @@ namespace CDSS.Controllers
             }
 
             // Only include properties from PatientMedication in ViewData
-            /*ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationName", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);*/
+            ViewData["MedicationName"] = new SelectList(_context.Patients.ToList(), "MedicationId", "MedicationName", patientMedication.MedicationId);
             return View(patientMedication);
         }
 
@@ -123,8 +111,7 @@ namespace CDSS.Controllers
             {
                 return NotFound();
             }
-            /*ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationName", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);*/
+            ViewData["MedicationName"] = new SelectList(_context.Medication.ToList(), "MedicationId", "MedicationName");
             return View(patientMedication);
         }
 
@@ -158,8 +145,7 @@ namespace CDSS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            /*ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "Text", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);*/
+            ViewData["MedicationName"] = new SelectList(_context.Patients.ToList(), "MedicationId", "MedicationName", patientMedication.MedicationId);
             return View(patientMedication);
         }
 
