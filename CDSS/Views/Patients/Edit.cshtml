@@ -48,22 +48,26 @@
                 <input asp-for="BloodType" class="form-control" />
                 <span asp-validation-for="BloodType" class="text-danger"></span>
             </div>
+          
+
+
             <div class="form-group">
-                <label asp-for="MedicalCondition" class="control-label"></label>
-                <select asp-for="MedicalCondition" class="form-control">
-                    <option value="Diabetes">Diabetes</option>
-                    <option value="Respiratory diseases">Respiratory diseases</option>
-                    <option value="Pneumonia">Pneumonia</option>
-                    <option value="Lung Cancer">Lung Cancer</option>
-                    <option value="High Blood Pressure">High Blood Pressure</option>
-                    <option value="High Cholesterol">High Cholesterol</option>
-                    <option value="High Blood Sugar">High Blood Sugar</option>
-                    <option value="Myopia">Myopia</option>
-                    <option value="Arthritis">Arthritis</option>
-                    <option value="Alzheimer">Alzheimer</option>
-                </select>
+                <label class="control-label">Medical Conditions</label>
+                <br />
+                @foreach (var condition in ViewBag.AllMedicalConditions)
+                {
+                    var selectedConditionsList = (ViewBag.SelectedMedicalConditions as List<string>) ?? new List<string>();
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="MedicalCondition" value="@condition" @(selectedConditionsList.Contains(condition) ? "checked" : "") />
+                        @condition
+                    </label>
+                }
                 <span asp-validation-for="MedicalCondition" class="text-danger"></span>
             </div>
+
+
+
+
             <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
