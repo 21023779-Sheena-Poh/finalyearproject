@@ -22,6 +22,7 @@ public partial class PatientMedication
 
     public DateTime? EndMedication { get; set; }
 
+    [ValidateNever]
     public virtual Medication Medication { get; set; } = null!;
 
     public string MedicationName
@@ -36,6 +37,7 @@ public partial class PatientMedication
         }
     }
 
+    [ValidateNever]
     public virtual Patients Patient { get; set; } = null!;
 
 }

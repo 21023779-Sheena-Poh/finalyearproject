@@ -169,6 +169,28 @@ namespace CDSS.Controllers
 
             // Pass the selected conditions as an array to the view
             ViewBag.SelectedMedicalConditions = selectedConditions;
+
+
+            return View(patient);
+
+            // Get all distinct medical conditions from the existing data
+            var allMedicalConditions = _context.Patients
+                .Where(p => !string.IsNullOrEmpty(p.MedicalCondition))
+                .Select(p => (p.MedicalCondition ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries))
+                .AsEnumerable() // Materialize the query on the server side
+                .SelectMany(splitConditions => splitConditions)
+                .Select(trimmedCondition => trimmedCondition.Trim())
+                .Where(trimmedCondition => !string.IsNullOrEmpty(trimmedCondition))
+                .Distinct()
+                .ToArray();
+
+            ViewBag.AllMedicalConditions = allMedicalConditions;
+
+            // Split the MedicalCondition of the patient into an array for pre-selection
+            var selectedConditions = (patient.MedicalCondition ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries)?.Select(c => c.Trim()) ?? Array.Empty<string>();
+
+            // Pass the selected conditions as an array to the view
+            ViewBag.SelectedMedicalConditions = selectedConditions;
          
 
             return View(patient);

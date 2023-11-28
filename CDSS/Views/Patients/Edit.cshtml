@@ -48,6 +48,9 @@
                 <input asp-for="BloodType" class="form-control" />
                 <span asp-validation-for="BloodType" class="text-danger"></span>
             </div>
+
+
+
           
 
 
@@ -81,5 +84,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
