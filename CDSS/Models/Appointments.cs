@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace CDSS.Models;
 
@@ -11,16 +10,18 @@ public partial class Appointments
 
     public DateTime AppointmentDate { get; set; }
 
-    public string? PurposeOfVisit { get; set; }
+    public string PurposeOfVisit { get; set; } = null!;
 
     public string? AdditionalNotes { get; set; }
 
+    [ValidateNever]
     public virtual Patients Patient { get; set; } = null!;
 
-    public string FullName => Patient.FullName;
-
+    [ValidateNever]
     public virtual ICollection<Review> Review { get; set; } = new List<Review>();
 
+    [ValidateNever]
     public virtual ICollection<MedicalStaff> MedicalStaff { get; set; } = new List<MedicalStaff>();
+
 
 }

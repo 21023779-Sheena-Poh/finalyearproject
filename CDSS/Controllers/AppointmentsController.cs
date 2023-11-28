@@ -48,14 +48,14 @@ namespace CDSS.Controllers
             return View(appointments);
         }
 
-        // GET: Appointments/Create
+        //GET: Appointments/Create
         public IActionResult Create()
         {
-            ViewData["FullName"] = new SelectList(_context.Patients, "PatientId", "FullName");
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName");
             return View();
         }
 
-        // POST: Appointments/Create
+        //POST: Appointments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AppointmentId,PatientId,AppointmentDate,PurposeOfVisit,AdditionalNotes")] Appointments appointments)
@@ -69,6 +69,9 @@ namespace CDSS.Controllers
             ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", appointments.PatientId);
             return View(appointments);
         }
+
+
+
 
         // GET: Appointments/Edit/5
         public async Task<IActionResult> Edit(int? id)
