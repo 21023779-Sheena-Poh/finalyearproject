@@ -48,9 +48,11 @@ namespace CDSS.Controllers
         // GET: Reviews/Create
         public IActionResult Create()
         {
-            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId");
+           ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId");
             return View();
         }
+
+
 
         // POST: Reviews/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -68,6 +70,10 @@ namespace CDSS.Controllers
             ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId", review.AppointmentId);
             return View(review);
         }
+
+
+
+
 
         // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
