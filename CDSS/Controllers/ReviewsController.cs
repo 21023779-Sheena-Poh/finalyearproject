@@ -161,14 +161,14 @@ namespace CDSS.Controllers
             {
                 _context.Review.Remove(review);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ReviewExists(int id)
         {
-          return (_context.Review?.Any(e => e.ReviewId == id)).GetValueOrDefault();
+            return (_context.Review?.Any(e => e.ReviewId == id)).GetValueOrDefault();
         }
     }
 }

@@ -10,21 +10,21 @@
     <style>
         /* Updated styles for the menu items */
         .navbar-nav .nav-item {
-            background-color: #333; /* Dark background color */
+            background-color: #2980b9; /* Slightly darker blue background color */
             border-radius: 5px; /* Rounded corners */
             margin: 5px; /* Add some margin for spacing */
         }
 
-        .navbar-nav .nav-item .nav-link {
-            color: #fff; /* Light font color */
-            padding: 10px 15px; /* Add padding to the links */
-            display: block;
-            text-decoration: none;
-        }
+            .navbar-nav .nav-item .nav-link {
+                color: #fff; /* Light font color */
+                padding: 10px 15px; /* Add padding to the links */
+                display: block;
+                text-decoration: none;
+            }
 
-        .navbar-nav .nav-item .nav-link:hover {
-            background-color: #555; /* Darker background on hover */
-        }
+                .navbar-nav .nav-item .nav-link:hover {
+                    background-color: #2471a3; /* Darker background on hover */
+                }
     </style>
 </head>
 <body>
@@ -41,18 +41,18 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                         </li>
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="PatientMedications" asp-action="Index">Patients Medical Records</a>
-                        </li>
+                        </li> *@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Appointments" asp-action="Index">Appointments</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Reviews" asp-action="Index">Comments</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="PrescriptionHistory" asp-action="Index">Prescription History</a>
-                        </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="PatientMedications" asp-action="PrescriptionHistory">Prescription History</a>
+                        </li> *@
                     </ul>
                 </div>
             </div>

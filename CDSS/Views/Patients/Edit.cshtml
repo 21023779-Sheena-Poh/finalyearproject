@@ -48,11 +48,30 @@
                 <input asp-for="BloodType" class="form-control" />
                 <span asp-validation-for="BloodType" class="text-danger"></span>
             </div>
+
+
+
+          
+
+
             <div class="form-group">
-                <label asp-for="MedicalCondition" class="control-label"></label>
-                <textarea asp-for="MedicalCondition" class="form-control" rows="5"></textarea>
+                <label class="control-label">Medical Conditions</label>
+                <br />
+                @foreach (var condition in ViewBag.AllMedicalConditions)
+                {
+                    var selectedConditionsList = (ViewBag.SelectedMedicalConditions as List<string>) ?? new List<string>();
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="MedicalCondition" value="@condition" @(selectedConditionsList.Contains(condition) ? "checked" : "") />
+                        @condition
+                    </label>
+                }
                 <span asp-validation-for="MedicalCondition" class="text-danger"></span>
             </div>
+
+
+
+
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -65,5 +84,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

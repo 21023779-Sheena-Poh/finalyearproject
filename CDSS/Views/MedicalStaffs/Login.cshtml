@@ -1,11 +1,17 @@
-﻿@model LoginUser
+﻿@* @model LoginUser
 
 <style>
     body {
         background-color: lightblue;
     }
 
+    .form-control {
+        width: 400px; /* Set the desired width for the textboxes */
+        height: 50px; /* Set the desired height for the textboxes */
+        font-size: 18px; /* Set the desired font size for the textboxes */
+    }
 </style>
+
 <h4>CDSS Sign In</h4>
 
 <div class="col-sm-5">
@@ -21,13 +27,13 @@
     <form asp-controller="MedicalStaffs" asp-action="Login" method="post">
         <div class="mb-3">
             <label asp-for="Username" class="form-label fw-bold">Username :</label>
-            <input asp-for="Username" class="form-control form-control-sm" placeholder="Enter Username" />
+            <input asp-for="Username" class="form-control" placeholder="Enter Username" />
             <span asp-validation-for="Username" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="Password" class="form-label fw-bold">Password :</label>
-            <input asp-for="Password" class="form-control form-control-sm" placeholder="Password" />
+            <input asp-for="Password" class="form-control" placeholder="Password" />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
@@ -35,5 +41,190 @@
             <input type="submit" class="btn btn-sm btn-primary" value="Sign In" />
         </div>
     </form>
+</div>
+ *@
 
+
+@model LoginUser
+<style>
+    body {
+        background-color: lightblue;
+    }
+
+    /*        .form-control {
+                            width: 400px;  Set the desired width for the textboxes
+                            height: 50px;  Set the desired height for the textboxes
+                            font-size: 18px;  Set the desired font size for the textboxes
+                        }*/
+
+    .form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Ubuntu', sans-serif;
+        text-decoration: none;
+    }
+
+    .form {
+        width: 720px;
+        height: 500px;
+        margin: 50px auto;
+        padding: 45px 65px;
+        /*            background: linear-gradient(to right, #8300cd, #b800c4);*/
+    }
+
+    .form__box {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background: #fff;
+        border-radius: 40px;
+    }
+
+    .form__left {
+        width: 50%;
+    }
+
+    .form__padding {
+        width: 210px;
+        height: 210px;
+        background: #f2f2f2;
+        border-radius: 50%;
+        margin: 0 auto;
+        line-height: 210px;
+        position: relative;
+    }
+
+    .form__image {
+        max-width: 100%;
+        width: 60%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .form__right {
+        line-height: 26px;
+        width: 50%;
+    }
+
+    .form__padding-right {
+        padding: 0 25px;
+    }
+
+    .form__title {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form__submit-btn {
+        background: #1fcc44;
+        cursor: pointer;
+    }
+
+        .form__submit-btn:hover {
+            background: #ff3f70;
+        }
+
+    .Username {
+        position: relative;
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        margin-bottom: 25px;
+        height: 35px;
+        border-radius: 20px;
+        border: none;
+        background: #f2f2f2;
+        padding: 10px;
+        font-size: 14px;
+        position: relative;
+    }
+
+        input:after {
+            position: absolute;
+            content: 'a***';
+        }
+
+    a {
+        color: #71df88;
+        position: relative;
+    }
+
+        a:hover {
+            color: #ff3f70;
+        }
+
+</style>
+
+<!--        <h4>CDSS Sign In</h4>-->
+<!--        <div class="col-sm-5">
+@if (ViewData["Message"] != null)
+{
+                    <div class="mb-3">
+                        <div class="alert alert-secondary">
+                            <text>@ViewData["Message"]</text>
+                        </div>
+                    </div>
+}
+
+            <form asp-controller="MedicalStaffs" asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label fw-bold">Username :</label>
+                    <input asp-for="Username" class="form-control" placeholder="Enter Username" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label fw-bold">Password :</label>
+                    <input asp-for="Password" class="form-control" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" class="btn btn-sm btn-primary" value="Sign In" />
+                </div>
+            </form>
+        </div>-->
+@if (ViewData["Message"] != null)
+{
+    <div class="mb-3">
+        <div class="alert alert-secondary">
+            <text>@ViewData["Message"]</text>
+        </div>
+    </div>
+}
+
+<div class="form">
+    <div class="form__box">
+        <div class="form__left">
+            <div class="form__padding">
+                <img src="~/images/hospital.png" class="form__image">
+            </div>
+        </div>
+        <div class="form__right">
+            <div class="form__padding-right">
+                <form asp-controller="MedicalStaffs" asp-action="Login" method="post">
+                    <h1 class="form__title">Staff Login</h1>
+                    <input asp-for="Username" type="text" placeholder="Username" class="Username">
+                    <input asp-for="Password" asp-validation-for="Password" class="text-danger" type="password" placeholder="Password" class="form__password">
+                    <input type="submit" value="Sign In" class="form__submit-btn">
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

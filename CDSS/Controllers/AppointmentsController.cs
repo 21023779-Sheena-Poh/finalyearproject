@@ -49,6 +49,8 @@ namespace CDSS.Controllers
         }
 
         //GET: Appointments/Create
+        public IActionResult Create()
+        //GET: Appointments/Create
          public IActionResult Create()
         {
             ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName");
@@ -59,6 +61,10 @@ namespace CDSS.Controllers
        [HttpPost]
        [ValidateAntiForgeryToken]
          public async Task<IActionResult> Create([Bind("AppointmentId,PatientId,AppointmentDate,PurposeOfVisit,AdditionalNotes")] Appointments appointments)
+        //POST: Appointments/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("AppointmentId,PatientId,AppointmentDate,PurposeOfVisit,AdditionalNotes")] Appointments appointments)
         {
             if (ModelState.IsValid)
             {

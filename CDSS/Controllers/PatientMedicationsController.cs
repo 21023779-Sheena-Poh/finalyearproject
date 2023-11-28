@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CDSS.Models;
@@ -18,6 +20,28 @@ namespace CDSS.Controllers
         {
             _context = context;
         }
+
+        /*// GET: PatientMedications/PrescriptionHistory/5
+        public async Task<IActionResult> PrescriptionHistory(int? id)
+        {
+            if (id == null || _context.Patients == null)
+            {
+                return NotFound();
+            }
+
+            var patientMedications = await _context.PatientMedication
+                .Include(pm => pm.Medication) // Include Medication information
+                .Where(pm => pm.PatientId == id)
+                .ToListAsync();
+
+            if (patientMedications == null)
+            {
+                return NotFound();
+            }
+
+            // Display the Prescription History view with the patient's medications
+            return View("PrescriptionHistory", patientMedications);
+        }*/
 
         // GET: PatientMedications
         public async Task<IActionResult> Index()
@@ -39,45 +63,72 @@ namespace CDSS.Controllers
             }
 
             var patientMedication = await _context.PatientMedication
-                .Include(p => p.Medication)
-                .Include(p => p.Patient)
+                .Include(pm => pm.Patient)       // Include Patient navigation property
+                .Include(pm => pm.Medication)    // Include Medication navigation property
                 .FirstOrDefaultAsync(m => m.PatientMedicationID == id);
+                
             if (patientMedication == null)
             {
                 return NotFound();
             }
 
+            //ViewBag.
             return View(patientMedication);
         }
 
         // GET: PatientMedications/Create
-        public IActionResult Create()
+        public IActionResult Create(int patientId)
         {
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId");
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId");
+            var medications = _context.Medication.ToList();
+
+            if (medications != null)
+            {
+                ViewBag.MedicationName = new SelectList(medications, "MedicationId", "MedicationName");
+            }
+            else
+            {
+                ViewBag.MedicationName = new SelectList(new List<Medication>(), "MedicationId", "MedicationName");
+            }
+
+            ViewData["patientId"] = patientId;
+
             return View();
         }
 
         // POST: PatientMedications/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PatientMedicationID,PatientId,MedicationId,Dosage,Frequency,Duration,StartMedication,EndMedication")] PatientMedication patientMedication)
+       
+        public async Task<IActionResult> Create(/*/*int patientId*/[Bind("PatientMedicationID,PatientId,MedicationId,Dosage,Frequency,Duration,StartMedication,EndMedication")] PatientMedication patientMedication)
         {
             if (ModelState.IsValid)
             {
+                //patientMedication.PatientId = patientId;
+                // Add a temporary log to check ModelState validity
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+
                 _context.Add(patientMedication);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Patients", new { id = patientMedication.PatientId });
             }
 
-            // Only include properties from PatientMedication in ViewData
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", patientMedication.PatientId);
+            // Repopulate the MedicationName dropdown correctly
+            var medications = _context.Medication.ToList();
+            ViewBag.MedicationName = new SelectList(medications, "MedicationId", "MedicationName");
+
+            // Return the Create view with the failed PatientMedication model
             return View(patientMedication);
         }
 
 
-        // GET: PatientMedications/Edit/5
+
+
+        // GET: PatientMedications1/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.PatientMedication == null)
@@ -90,12 +141,14 @@ namespace CDSS.Controllers
             {
                 return NotFound();
             }
-            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", patientMedication.PatientId);
+            ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationName", patientMedication.MedicationId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
             return View(patientMedication);
         }
 
-        // POST: PatientMedications/Edit/5
+        // POST: PatientMedications1/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PatientMedicationID,PatientId,MedicationId,Dosage,Frequency,Duration,StartMedication,EndMedication")] PatientMedication patientMedication)
@@ -123,12 +176,13 @@ namespace CDSS.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Patients", new { id = patientMedication.PatientId });
             }
             ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", patientMedication.PatientId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
             return View(patientMedication);
         }
+
 
         // GET: PatientMedications/Delete/5
         public async Task<IActionResult> Delete(int? id)
