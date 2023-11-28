@@ -10,7 +10,7 @@ public partial class Appointments
 
     public DateTime AppointmentDate { get; set; }
 
-    public string? PurposeOfVisit { get; set; }
+    public string PurposeOfVisit { get; set; } = null!;
 
     public string? AdditionalNotes { get; set; }
 
