@@ -18,8 +18,10 @@ public partial class PatientMedication
 
     public string? Duration { get; set; }
 
+    [DataType(DataType.Date)]
     public DateTime? StartMedication { get; set; }
 
+    [DataType(DataType.Date)]
     public DateTime? EndMedication { get; set; }
 
     [ValidateNever]

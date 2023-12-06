@@ -97,19 +97,16 @@ namespace CDSS.Controllers
 
         // POST: PatientMedications/Create
         [HttpPost]
-       
-        public async Task<IActionResult> Create(/*/*int patientId*/[Bind("PatientMedicationID,PatientId,MedicationId,Dosage,Frequency,Duration,StartMedication,EndMedication")] PatientMedication patientMedication)
+        public async Task<IActionResult> Create([Bind("PatientMedicationID,PatientId,MedicationId,Dosage,Frequency,Duration,StartMedication,EndMedication")] PatientMedication patientMedication)
         {
             if (ModelState.IsValid)
             {
-                //patientMedication.PatientId = patientId;
-                // Add a temporary log to check ModelState validity
-                foreach (var modelState in ModelState.Values)
+                if (patientMedication.EndMedication < patientMedication.StartMedication)
                 {
-                    foreach (var error in modelState.Errors)
-                    {
-                        Console.WriteLine(error.ErrorMessage);
-                    }
+                    ModelState.AddModelError("EndMedication", "End Medication cannot be earlier than Start Medication");
+                    var medications = _context.Medication.ToList();
+                    ViewBag.MedicationName = new SelectList(medications, "MedicationId", "MedicationName");
+                    return View(patientMedication);
                 }
 
                 _context.Add(patientMedication);
@@ -117,13 +114,12 @@ namespace CDSS.Controllers
                 return RedirectToAction("Details", "Patients", new { id = patientMedication.PatientId });
             }
 
-            // Repopulate the MedicationName dropdown correctly
-            var medications = _context.Medication.ToList();
-            ViewBag.MedicationName = new SelectList(medications, "MedicationId", "MedicationName");
+            var meds = _context.Medication.ToList();
+            ViewBag.MedicationName = new SelectList(meds, "MedicationId", "MedicationName");
 
-            // Return the Create view with the failed PatientMedication model
             return View(patientMedication);
         }
+
 
 
 
@@ -149,6 +145,7 @@ namespace CDSS.Controllers
         // POST: PatientMedications1/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: PatientMedications1/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PatientMedicationID,PatientId,MedicationId,Dosage,Frequency,Duration,StartMedication,EndMedication")] PatientMedication patientMedication)
@@ -160,6 +157,14 @@ namespace CDSS.Controllers
 
             if (ModelState.IsValid)
             {
+                if (patientMedication.EndMedication < patientMedication.StartMedication)
+                {
+                    ModelState.AddModelError("EndMedication", "End Medication cannot be earlier than Start Medication");
+                    ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
+                    ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
+                    return View(patientMedication);
+                }
+
                 try
                 {
                     _context.Update(patientMedication);
@@ -178,10 +183,12 @@ namespace CDSS.Controllers
                 }
                 return RedirectToAction("Details", "Patients", new { id = patientMedication.PatientId });
             }
+
             ViewData["MedicationId"] = new SelectList(_context.Medication, "MedicationId", "MedicationId", patientMedication.MedicationId);
             ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", patientMedication.PatientId);
             return View(patientMedication);
         }
+
 
 
         // GET: PatientMedications/Delete/5
@@ -217,10 +224,13 @@ namespace CDSS.Controllers
             if (patientMedication != null)
             {
                 _context.PatientMedication.Remove(patientMedication);
+                await _context.SaveChangesAsync();
+
+                // Assuming patientMedication.PatientId holds the patient's ID
+                return RedirectToAction("Details", "Patients", new { id = patientMedication.PatientId });
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)); // Or handle appropriately if patientMedication is null
         }
 
         private bool PatientMedicationExists(int id)

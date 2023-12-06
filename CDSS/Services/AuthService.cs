@@ -25,7 +25,9 @@ public class AuthService : IAuthService
         DataTable ds = _dbSvc.GetTable(sqlLogin, username, password);
         if (ds.Rows.Count == 1)
         {
-            principal =
+            if (password == ds.Rows[0]["Password"].ToString())
+            {
+                principal =
                new ClaimsPrincipal(
                   new ClaimsIdentity(
                      new Claim[] {
@@ -41,7 +43,8 @@ public class AuthService : IAuthService
                      }, "Basic"
                   )
                );
-            return true;
+                return true;
+            }
         }
         return false;
     }

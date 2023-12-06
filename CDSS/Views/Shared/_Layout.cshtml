@@ -69,6 +69,13 @@
                     </div>
 
                     <div class="text-center">
+                        <a asp-controller="MedicalStaffs" asp-action="ChangePassword"
+                           class="btn btn-link fs-6">
+                            Change Password
+                        </a>
+                    </div>
+
+                    <div class="text-center">
                         <a asp-controller="MedicalStaffs" asp-action="Logoff"
                            asp-route-returnUrl="~/MedicalStaffs/Login" class="btn btn-link fs-6">
                             Sign Off
@@ -80,6 +87,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @RenderSection("ChangePasswordSection", required: false)
             @RenderBody()
         </main>
     </div>
@@ -92,6 +100,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -66,6 +66,12 @@
 }
 
 <div>
+    <div style="margin-bottom: 10px;">
+        <a asp-controller="PatientMedications" asp-action="Create" asp-route-patientId="@Model.PatientId" class="btn btn-primary">Create</a> 
+        @* <a asp-controller="PatientMedications" asp-action="Edit" asp-route-id="@Model.PatientId" class="btn btn-secondary">Edit</a> |
+        <a asp-controller="PatientMedications" asp-action="Delete" asp-route-id="@Model.PatientId" class="btn btn-danger">Delete</a> *@
+    </div>
+
     <table class="table">
         <thead>
             <tr>
@@ -103,7 +109,7 @@
                     Frequency
                 </th>
                 <th>
-                    Duration
+                    Crcl
                 </th>
                 <th>
                     StartMedication
@@ -146,7 +152,7 @@
                         @Html.DisplayFor(modelItem => item.Medication.MedicationName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Dosage)
+                        @Html.DisplayFor(modelItem => item.Dosage) mg
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Frequency)
@@ -162,7 +168,7 @@
                     </td>
                     <td style="white-space: nowrap;">
                         <span style="display: inline-block;">
-                            <a asp-controller="PatientMedications" asp-action="Create" asp-route-patientId="@Model.PatientId">Create</a> |
+                            @* <a asp-controller="PatientMedications" asp-action="Create" asp-route-patientId="@Model.PatientId">Create</a> | *@
                             <a asp-controller="PatientMedications" asp-action="Edit" asp-route-id="@item.PatientMedicationID">Edit</a> | 
                             <a asp-controller="PatientMedications" asp-action="Delete" asp-route-id="@item.PatientMedicationID">Delete</a>
                         </span>
