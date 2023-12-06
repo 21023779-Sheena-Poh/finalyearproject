@@ -44,25 +44,38 @@
             </div>
             <div class="mb-3">
                 <label asp-for="BloodType" class="form-label fw-bold fs-5"></label>
-                <input asp-for="BloodType" class="form-control" />
+                <select asp-for="BloodType" class="form-control">
+                    <option value="A+">A+</option>
+                    <option value="B+">B+</option>
+                    <option value="O+">O+</option>
+                    <option value="AB+">AB+</option>
+                    <option value="A-">A-</option>
+                    <option value="B-">B-</option>
+                    <option value="O-">O-</option>
+                    <option value="AB-">AB-</option>
+                </select>
                 <span asp-validation-for="BloodType" class="text-danger"></span>
             </div>
-
 
 
             <div class="form-group">
                 <label class="control-label">Medical Conditions</label>
                 <br />
-                @foreach (var condition in ViewBag.AllMedicalConditions)
+                @if (ViewBag.AllMedicalConditions != null)
                 {
                     var selectedConditionsList = (ViewBag.SelectedMedicalConditions as List<string>) ?? new List<string>();
-                    <label class="checkbox-inline">
-                        <input type="checkbox" name="MedicalCondition" value="@condition" @(selectedConditionsList.Contains(condition) ? "checked" : "") />
-                        @condition
-                    </label>
+                    foreach (var condition in ViewBag.AllMedicalConditions)
+                    {
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="MedicalCondition" value="@condition" @(selectedConditionsList.Contains(condition) ? "checked" : "") />
+                            @condition
+                        </label>
+                    }
                 }
                 <span asp-validation-for="MedicalCondition" class="text-danger"></span>
             </div>
+
+
 
 
 

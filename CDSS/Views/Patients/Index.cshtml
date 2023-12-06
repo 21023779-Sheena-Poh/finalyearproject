@@ -3,21 +3,40 @@
 @{
     ViewData["Title"] = "Here are the patients under your care";
 }
+
 <style>
     body {
         background-color: lightblue;
     }
-
 </style>
 
 <h1>Here are the patients under your care</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                <a asp-action="Create">Create New</a> 
+            </p>
+        </div>
+        <div class="col-md-4 text-right">
+            <!-- Move the search bar to the other end -->
+            <form asp-action="Index" method="get" class="form-inline">
+                <div class="input-group">
+                    <label class="sr-only" for="searchTerm">Search:</label>
+                    <input type="text" id="searchTerm" name="searchTerm" class="form-control" placeholder="Search by Name, Ward, etc." style="width: 50%;">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
+
             @* <th>
                 @Html.DisplayNameFor(model => model.PatientId)
             </th> *@
@@ -64,10 +83,10 @@
                 @item.GetFormattedBirthdate()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Ward)
+                Ward @Html.DisplayFor(modelItem => item.Ward) 
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Bed)
+                Bed @Html.DisplayFor(modelItem => item.Bed)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Weight)

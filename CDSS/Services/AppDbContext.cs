@@ -151,6 +151,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Weight).HasColumnType("decimal(5, 2)");
+
         });
 
         modelBuilder.Entity<Review>(entity =>
