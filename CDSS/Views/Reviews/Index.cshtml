@@ -2,12 +2,14 @@
 
 @{
     ViewData["Title"] = "Outstanding Reviews";
+    var appointmentId = ViewBag.AppointmentId;
+    var hasReviews = ViewBag.HasReviews;
 }
+
 <style>
     body {
         background-color: lightblue;
     }
-
 </style>
 
 <h1>Outstanding Reviews</h1>
@@ -15,39 +17,48 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Appointment.AppointmentId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
-            </td>
-        </tr>
+
+@if (hasReviews)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReviewDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReviewText)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Appointment)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReviewDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReviewText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Appointment.AppointmentId)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <p>No reviews found for this appointment.</p>
+}

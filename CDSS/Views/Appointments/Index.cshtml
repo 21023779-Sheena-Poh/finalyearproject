@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "All Appointments";
+    var warningMessage = TempData["WarningMessage"] as string;
 }
 <style>
     body {
@@ -12,15 +13,34 @@
 
 <h1>All Appointments</h1>
 
+@if (!string.IsNullOrEmpty(warningMessage))
+{
+    <div class="alert alert-warning" role="alert">
+        @warningMessage
+    </div>
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <input type="text" name="searchString" placeholder="Search...">
+        <input type="submit" value="Search">
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Patient.FullName)
+                @Html.ActionLink("▲", "Index", new { sortOrder = "asc", sortBy = "FullName" })
+                @Html.ActionLink("▼", "Index", new { sortOrder = "desc", sortBy = "FullName" })
             </th>
+
+
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentDate)
             </th>
@@ -53,7 +73,9 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.AppointmentId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.AppointmentId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.AppointmentId">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.AppointmentId">Delete</a> |
+                    <a asp-controller="Reviews" asp-action="Index" asp-route-appointmentId="@item.AppointmentId">Reviews</a>
+
                 </td>
             </tr>
         }
