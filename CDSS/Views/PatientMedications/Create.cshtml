@@ -32,36 +32,48 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Dosage" class="control-label"></label>
+                <label asp-for="Dosage" class="control-label">Crcl</label>
                 <input asp-for="Dosage" class="form-control" />
                 <span asp-validation-for="Dosage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Frequency" class="control-label"></label>
-                <input asp-for="Frequency" class="form-control" />
-                   @*  <option value="once daily">once daily</option>
-                    <option value="twice daily">twice daily</option>
-                    <option value="three times daily">three times daily</option>
-                    <option value="Lung Cancer">Lung Cancer</option>
-                    <option value="every four hours">every four hours</option>
-                    <option value="every eight hours">every eight hours</option>
-                    <option value="before meal">before meal</option>
-                    <option value="after meal">after meal</option> *@
+                <label asp-for="Frequency" class="control-label">Frequency</label>
+                <select asp-for="Frequency" class="form-control">
+                    <option value="once a day">Once a day</option>
+                    <option value="every other day">Every other day</option>
+                    <option value="every morning">Every morning</option>
+                    <option value="every night">Every night</option>
+                    <option value="twice a day">Twice a day</option>
+                    <option value="three times a day">Three times a day</option>
+                    <option value="four times a day">Four times a day</option>
+                    <option value="every hour">Every hour</option>
+                    <option value="every 4 hours">Every 4 hours</option>
+                    <option value="every 6 hours">Every 6 hours</option>
+                    <option value="immediately">Immediately</option>
+                    <option value="use as directed">Use as directed</option>
+                    <option value="when necessary">When necessary</option>
+                </select>
                 <span asp-validation-for="Frequency" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <label asp-for="Duration" class="control-label">Crcl</label>
+                <select asp-for="Duration" class="form-control">
+                    <option value=">/=90 (Normal)">>/=90 (Normal)</option>
+                    <option value="60-89 (Mild)">60-89 (Mild)</option>
+                    <option value="30-59 (Moderate)">30-59 (Moderate)</option>
+                    <option value="15-29 (Severe)">15-29 (Severe)</option>
+                    <option value="<15 (Terminal)"><15 (Terminal)</option>
+                </select>
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartMedication" class="control-label"></label>
-                <input asp-for="StartMedication" class="form-control" />
+                <input id="startMedicationInput" asp-for="StartMedication" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="StartMedication" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndMedication" class="control-label"></label>
-                <input asp-for="EndMedication" class="form-control" />
+                <input id="endMedicationInput" asp-for="EndMedication" class="form-control" />
                 <span asp-validation-for="EndMedication" class="text-danger"></span>
             </div>
             <br />
@@ -77,5 +89,31 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var startMedicationInput = document.getElementById("startMedicationInput");
+            var endMedicationInput = document.getElementById("endMedicationInput");
+
+            startMedicationInput.addEventListener("change", function () {
+                endMedicationInput.min = startMedicationInput.value;
+                if (endMedicationInput.value < startMedicationInput.value) {
+                    endMedicationInput.setCustomValidity("End Medication cannot be earlier than Start Medication");
+                } else {
+                    endMedicationInput.setCustomValidity("");
+                }
+            });
+
+            endMedicationInput.addEventListener("change", function () {
+                if (endMedicationInput.value < startMedicationInput.value) {
+                    endMedicationInput.setCustomValidity("End Medication cannot be earlier than Start Medication");
+                } else {
+                    endMedicationInput.setCustomValidity("");
+                }
+            });
+        });
+    </script>
+
 }
