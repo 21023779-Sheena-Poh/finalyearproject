@@ -53,6 +53,12 @@
                         @* <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="PatientMedications" asp-action="PrescriptionHistory">Prescription History</a>
                         </li> *@
+                        @if (User.IsInRole("NurseAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="MedicalStaffs" asp-action="ViewUsers">Manage Users</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

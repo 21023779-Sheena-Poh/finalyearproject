@@ -1,0 +1,22 @@
+﻿@model MedicalStaff
+@{
+    ViewData["Title"] = "UpdateUserRole";
+}
+
+<h2>Update User Role</h2>
+
+<form asp-action="UpdateUserRole" method="post">
+    <input type="hidden" asp-for="MedicalStaffId" />
+
+    <!-- Display existing user information -->
+
+    <div class="form-group">
+        <label asp-for="Role"></label>
+        <select asp-for="Role" asp-items="@ViewBag.Roles" class="form-control"></select>
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    </br>
+    <button type="submit" class="btn btn-primary">Update Role</button>
+</form>
+
+

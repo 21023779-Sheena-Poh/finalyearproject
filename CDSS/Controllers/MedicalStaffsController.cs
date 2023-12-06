@@ -159,4 +159,122 @@ public class MedicalStaffsController : Controller
             return Json(false);
     }
 
+    // Add this method for NurseAdmin role to view all users
+    [Authorize(Roles = "NurseAdmin")]
+    public IActionResult ViewUsers()
+    {
+        var users = _dbSvc.GetList<MedicalStaff>("SELECT * FROM MedicalStaff");
+
+        // Check for success message
+        if (TempData.ContainsKey("SuccessMessage"))
+        {
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+        }
+
+        return View(users);
+    }
+
+
+    // Add this method for NurseAdmin role to create a new user
+    [HttpGet]
+    [Authorize(Roles = "NurseAdmin")]
+    public IActionResult CreateUser()
+    {
+        ViewBag.Roles = new SelectList(new[] { "Doctor", "Nurse", "NurseAdmin", "Pharmacist" });
+        return View();
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "NurseAdmin")]
+    public IActionResult CreateUser(MedicalStaff user)
+    {
+        // Check for duplicate username
+        if (UsernameExists(user.Username))
+        {
+            ModelState.AddModelError("Username", "Username already exists. Please choose a different one.");
+            ViewBag.Roles = new SelectList(new[] { "Doctor", "Nurse", "NurseAdmin", "Pharmacist" });
+            return View(user);
+        }
+
+        if (ModelState.IsValid)
+        {
+            // Perform user creation logic
+            // For simplicity, let's assume a generic SQL insert statement
+            string insertSql = "INSERT INTO MedicalStaff (Username, Password, FirstName, LastName, Role) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')";
+            _dbSvc.ExecSQL(insertSql, user.Username, user.Password, user.FirstName, user.LastName, user.Role);
+
+            // Set success message in TempData
+            TempData["SuccessMessage"] = "User created successfully.";
+
+            return RedirectToAction("ViewUsers");
+        }
+
+        ViewBag.Roles = new SelectList(new[] { "Doctor", "Nurse", "NurseAdmin", "Pharmacist" });
+        return View(user);
+    }
+
+
+    // Helper method to check if the username already exists
+    private bool UsernameExists(string username)
+    {
+        // Query your database to check if the username already exists
+        var existingUser = _dbSvc.GetList<MedicalStaff>($"SELECT * FROM MedicalStaff WHERE Username = '{username}'").FirstOrDefault();
+
+        // If the username already exists, return true; otherwise, return false
+        return existingUser != null;
+    }
+
+
+    // Add this method for NurseAdmin role to update user roles
+    [HttpGet]
+    [Authorize(Roles = "NurseAdmin")]
+    public IActionResult UpdateUserRole(int id)
+    {
+        var user = _dbSvc.GetList<MedicalStaff>($"SELECT * FROM MedicalStaff WHERE MedicalStaffId = {id}").FirstOrDefault();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Roles = new SelectList(new[] { "Doctor", "Nurse", "NurseAdmin", "Pharmacist" });
+        return View(user);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "NurseAdmin")]
+    public IActionResult UpdateUserRole(MedicalStaff user)
+    {
+        if (ModelState.IsValid)
+        {
+            // Perform user role update logic
+            // For simplicity, let's assume a generic SQL update statement
+            string updateSql = "UPDATE MedicalStaff SET Role = '{0}' WHERE MedicalStaffId = {1}";
+            _dbSvc.ExecSQL(updateSql, user.Role, user.MedicalStaffId);
+
+            // Set success message in TempData
+            TempData["SuccessMessage"] = "User role updated successfully.";
+
+            return RedirectToAction("ViewUsers");
+        }
+
+        ViewBag.Roles = new SelectList(new[] { "Doctor", "Nurse", "NurseAdmin", "Pharmacist" });
+        return View(user);
+    }
+
+    [Authorize(Roles = "NurseAdmin")]
+    public IActionResult DeleteUser(int id)
+    {
+        // Perform user deletion logic
+        // For simplicity, let's assume a generic SQL delete statement
+        string deleteSql = $"DELETE FROM MedicalStaff WHERE MedicalStaffId = {id}";
+        _dbSvc.ExecSQL(deleteSql);
+
+        // Set success message in TempData
+        TempData["SuccessMessage"] = "User deleted successfully.";
+
+        return RedirectToAction("ViewUsers");
+    }
+
+
 }

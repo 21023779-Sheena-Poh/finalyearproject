@@ -1,0 +1,15 @@
+﻿@model MedicalStaff
+@{
+    ViewData["Title"] = "DeleteUser";
+}
+
+<h2>Delete User</h2>
+
+<form asp-action="DeleteUser" method="post">
+    <input type="hidden" asp-for="MedicalStaffId" />
+
+    <!-- Display existing user information -->
+
+    <button type="submit" class="btn btn-danger">Delete User</button>
+</form>
+

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CDSS.Models;
 using CDSS.Services;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CDSS.Controllers
 {
@@ -70,7 +71,7 @@ namespace CDSS.Controllers
 
 
         // POST: Reviews/Create
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ReviewId,AppointmentId,ReviewDateTime,ReviewText")] Review review)
         {
@@ -82,8 +83,49 @@ namespace CDSS.Controllers
             }
             ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId", review.AppointmentId);
             return View(review);
-        }
+        }*/
 
+        public async Task<IActionResult> Create(int? id)
+        {
+            if (id == null || _context.Patients == null)
+            {
+                return NotFound();
+            }
+
+            var patient = await _context.Patients.FirstOrDefaultAsync(m => m.PatientId == id);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            var prescriptions = await _context.PatientMedication
+                .Where(pm => pm.PatientId == id)
+                .Include(pm => pm.Medication)
+                .ToListAsync();
+
+            ViewData["prescriptions"] = prescriptions;
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            // Log or display validation errors
+            foreach (var modelState in ModelState.Values)
+            {
+                if (modelState.ValidationState == ModelValidationState.Invalid)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+            }
+
+
+
+            return View(patient);
+        }
 
 
         // GET: Reviews/Edit/5
