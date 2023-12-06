@@ -21,18 +21,50 @@ namespace CDSS.Controllers
             _context = context;
         }
 
-        // GET: Patients
-        public async Task<IActionResult> Index()
+
+        // GET: Patients/Index
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchTerm)
         {
             if (_context != null && _context.Patients != null)
             {
-                return View(await _context.Patients.ToListAsync());
+                var patients = _context.Patients.AsQueryable();
+
+                // Filter patients based on the search term in FirstName, LastName, or MedicalCondition
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    patients = patients.Where(p =>
+                        p.FirstName.Contains(searchTerm) ||
+                        p.LastName.Contains(searchTerm) ||
+                        (p.MedicalCondition != null && p.MedicalCondition.Contains(searchTerm)) ||
+                        (p.Ward != null && p.Ward.Contains(searchTerm))
+                    );
+                }
+
+                return View(await patients.ToListAsync());
             }
             else
             {
                 return Problem("AppDbContext or its entity set 'Patients' is null.");
             }
         }
+
+
+
+
+
+        //// GET: Patients
+        //public async Task<IActionResult> Index()
+        //{
+        //    if (_context != null && _context.Patients != null)
+        //    {
+        //        return View(await _context.Patients.ToListAsync());
+        //    }
+        //    else
+        //    {
+        //        return Problem("AppDbContext or its entity set 'Patients' is null.");
+        //    }
+        //}
 
         // GET: Patients/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -76,6 +108,7 @@ namespace CDSS.Controllers
 
             return View(patient);
         }
+
         // GET: Patients/Create
         public IActionResult Create()
         {
@@ -173,27 +206,7 @@ namespace CDSS.Controllers
 
             return View(patient);
 
-            ////// Get all distinct medical conditions from the existing data
-            ////var allMedicalConditions = _context.Patients
-            ////    .Where(p => !string.IsNullOrEmpty(p.MedicalCondition))
-            ////    .Select(p => (p.MedicalCondition ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries))
-            ////    .AsEnumerable() // Materialize the query on the server side
-            ////    .SelectMany(splitConditions => splitConditions)
-            ////    .Select(trimmedCondition => trimmedCondition.Trim())
-            ////    .Where(trimmedCondition => !string.IsNullOrEmpty(trimmedCondition))
-            ////    .Distinct()
-            ////    .ToArray();
 
-            ////ViewBag.AllMedicalConditions = allMedicalConditions;
-
-            ////// Split the MedicalCondition of the patient into an array for pre-selection
-            ////var selectedConditions = (patient.MedicalCondition ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries)?.Select(c => c.Trim()) ?? Array.Empty<string>();
-
-            ////// Pass the selected conditions as an array to the view
-            ////ViewBag.SelectedMedicalConditions = selectedConditions;
-         
-
-            //return View(patient);
         }
 
 
@@ -242,6 +255,9 @@ namespace CDSS.Controllers
 
             return View(patients);
         }
+
+
+
 
 
 

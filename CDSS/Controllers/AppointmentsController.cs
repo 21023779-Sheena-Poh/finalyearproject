@@ -19,15 +19,60 @@ namespace CDSS.Controllers
             _context = context;
         }
 
-        // GET: Appointments
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string sortBy)
         {
             var appointments = await _context.Appointments
-                .Include(a => a.Patient) // Ensure patient information is included
+                .Include(a => a.Patient)
                 .ToListAsync();
+
+            // Apply search filter if searchString is not null or empty
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+
+                appointments = appointments
+                    .Where(a =>
+                        a.Patient.FullName.ToLower().Contains(searchString) ||
+                        a.AppointmentDate.ToString().ToLower().Contains(searchString) ||
+                        a.PurposeOfVisit.ToLower().Contains(searchString) ||
+                        (a.AdditionalNotes != null && a.AdditionalNotes.ToLower().Contains(searchString))
+                    )
+                    .ToList();
+            }
+
+            // Apply sorting
+            switch (sortOrder)
+            {
+                case "asc":
+                    appointments = appointments.OrderBy(GetSortExpression(sortBy)).ToList();
+                    break;
+                case "desc":
+                    appointments = appointments.OrderByDescending(GetSortExpression(sortBy)).ToList();
+                    break;
+                default:
+                    appointments = appointments.OrderBy(a => a.Patient.FullName).ToList();
+                    break;
+            }
+
+            ViewData["NameSortParam"] = sortOrder == "desc" ? "asc" : "desc";
 
             return View(appointments);
         }
+
+        private Func<Appointments, string> GetSortExpression(string sortBy)
+        {
+            switch (sortBy)
+            {
+                case "FullName":
+                    return a => a.Patient.FullName;
+                // Add other cases for different properties to sort by
+                default:
+                    return a => a.Patient.FullName;
+            }
+        }
+
+
 
         // GET: Appointments/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -124,7 +169,7 @@ namespace CDSS.Controllers
             return View(appointments);
         }
 
-        // GET: Appointments/Delete/5
+        //GET: Appointments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Appointments == null)
@@ -135,9 +180,20 @@ namespace CDSS.Controllers
             var appointments = await _context.Appointments
                 .Include(a => a.Patient)
                 .FirstOrDefaultAsync(m => m.AppointmentId == id);
+
             if (appointments == null)
             {
                 return NotFound();
+            }
+
+            // Check if there are associated reviews
+            var hasReviews = _context.Review.Any(r => r.AppointmentId == id);
+
+            if (hasReviews)
+            {
+                // Display warning message
+                TempData["WarningMessage"] = "Cannot delete appointment with associated reviews. Delete reviews first.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(appointments);
@@ -152,6 +208,17 @@ namespace CDSS.Controllers
             {
                 return Problem("Entity set 'AppDbContext.Appointments' is null.");
             }
+
+            // Check if there are associated reviews
+            var hasReviews = _context.Review.Any(r => r.AppointmentId == id);
+
+            if (hasReviews)
+            {
+                // Display warning message
+                TempData["WarningMessage"] = "Cannot delete appointment with associated reviews. Delete reviews first.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var appointments = await _context.Appointments.FindAsync(id);
             if (appointments != null)
             {
@@ -161,6 +228,8 @@ namespace CDSS.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool AppointmentsExists(int id)
         {

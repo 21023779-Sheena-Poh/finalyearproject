@@ -19,12 +19,27 @@ namespace CDSS.Controllers
             _context = context;
         }
 
+
         // GET: Reviews
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? appointmentId)
         {
-            var appDbContext = _context.Review.Include(r => r.Appointment);
-            return View(await appDbContext.ToListAsync());
+            var query = _context.Review.Include(r => r.Appointment).AsQueryable();
+
+            if (appointmentId != null)
+            {
+                query = query.Where(r => r.AppointmentId == appointmentId);
+            }
+
+            var reviews = await query.ToListAsync();
+
+            // Pass appointmentId and a flag indicating if reviews are found
+            ViewBag.AppointmentId = appointmentId;
+            ViewBag.HasReviews = reviews.Any();
+
+            return View(reviews);
         }
+
+
 
         // GET: Reviews/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -55,8 +70,6 @@ namespace CDSS.Controllers
 
 
         // POST: Reviews/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ReviewId,AppointmentId,ReviewDateTime,ReviewText")] Review review)
@@ -70,8 +83,6 @@ namespace CDSS.Controllers
             ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId", review.AppointmentId);
             return View(review);
         }
-
-
 
 
 
@@ -93,8 +104,6 @@ namespace CDSS.Controllers
         }
 
         // POST: Reviews/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ReviewId,AppointmentId,ReviewDateTime,ReviewText")] Review review)
@@ -170,5 +179,7 @@ namespace CDSS.Controllers
         {
             return (_context.Review?.Any(e => e.ReviewId == id)).GetValueOrDefault();
         }
+
+
     }
 }
